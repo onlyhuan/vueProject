@@ -15,6 +15,7 @@ import video from '@/components/Home/Video/video.vue'
 
 
 import newsDetail from '@/components/Home/News/newsDetail.vue'
+import shareDetail from '@/components/Home/Share/shareDetail.vue'
 
 Vue.use(Router)
 
@@ -78,6 +79,12 @@ export default new Router({
       path:'/news/:id',
       name:'newsDetail',
       component:newsDetail,
+      props:true
+    },
+    {
+      path:'/share/:id',
+      name:'shareDetail',
+      component:shareDetail,
       props:true
     }
   ]
