@@ -1,13 +1,7 @@
 <template>
     <div class="mui-content">
         <!-- 轮播 -->
-        <mt-swipe :auto="4000">
-            <mt-swipe-item  v-for="(item ,index) in images" :key="index">
-                <router-link :to="item.url">
-                    <img :src=" item.img ">
-                </router-link>
-            </mt-swipe-item>
-        </mt-swipe>
+        <swipe :imgUrl="img_url"></swipe>
         <!-- 九宫格 -->
         <ul class="mui-table-view mui-grid-view mui-grid-9">
 		            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" v-for="item in menus" :key="item.url">
@@ -24,6 +18,7 @@
 import Vue from "vue";
 import { Swipe, SwipeItem } from "mint-ui";
 import 'mint-ui/lib/style.css';
+import swipe from "../Commen/swipe"
 
 
 Vue.component(Swipe.name, Swipe);
@@ -33,30 +28,16 @@ export default {
   name: "home",
   data() {
     return {
-        images:[],
-        menus:[]
+        menus:[],
+        img_url:'getlunbo'
     }
   },
   created(){
-      this.getlunbo(),
-      this.getmenus()
+        this.getmenus()
   },
   methods:{
     //   获取轮播
-      getlunbo(){
-          this.$http
-          .get('getlunbo')
-          .then((response)=>{
-              if(response.status === 200 && response.data.status === 0){
-                  this.images = response.data.message;
-              }else{
-                  console.log('服务器出错了')
-              }
-          })
-          .catch((err)=>{
-            console.error((err))
-          })
-      },
+    
     //   获取九宫格
       getmenus(){
           this.$http
@@ -72,6 +53,9 @@ export default {
               console.error((err))
           })
       }
+  },
+components:{
+    swipe
   }
 };
 </script>
@@ -121,12 +105,6 @@ export default {
   background-color: #fff;
 }
 /* 轮播图 */
-.mint-swipe{
-    height: 250px;
-}
-.mint-swipe img{
-    width: 100%;
-    height: 100%;
-}
+
 </style>
 
