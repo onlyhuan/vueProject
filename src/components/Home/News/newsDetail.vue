@@ -12,13 +12,8 @@
             <h4>提交评论</h4>
 
             <div class="submitcomment">
-                <textarea placeholder="请输入评论内容">
-                
-                </textarea>
-
-                <div class="mui-btn mui-btn-primary">
-                发表
-                </div>
+                <textarea v-model="content" placeholder="请输入评论内容"></textarea>
+                <button @click="send" class="mui-btn mui-btn-primary">发表</button>
             </div>
 
             
@@ -36,7 +31,7 @@
             </div>
 
             <div class=" more">
-                <button class="mui-btn mui-btn-primary mui-btn-outlined">加载更多</button>
+                <button @click="loadmore" class="mui-btn mui-btn-primary mui-btn-outlined">加载更多</button>
             </div>
         </div>
     </div>
@@ -44,12 +39,16 @@
 
 <script>
 
-import '../../../assets/css/style.css'
+import '../../../assets/css/style.css';
+import { Toast } from 'mint-ui';
+
 export default {
     data(){
         return{
             news:{},
-            comments: []
+            comments: [],
+            content:'',
+            pageindex:1
         }
     },
     props:['id'],
@@ -78,12 +77,12 @@ export default {
         },
         // 根据ID获取新闻对应的评论信息
         getcomments(){
-            let url = 'getcomments/' + this.id + '?pageindex=1';
+            let url = 'getcomments/' + this.id + '?pageindex=' + this.pageindex;
             this.$http
             .get(url)
             .then((response)=>{
                 if(response.status === 200 && response.data.status === 0 ){
-                    this.comments = response.data.message
+                    this.comments = this.comments.concat(response.data.message)
                 }else{
                     console.log('服务器出错了')
                 }
@@ -91,6 +90,38 @@ export default {
             .catch((err)=>{
                 console.error('err')
             })
+        },
+        // 发表评论
+        send(){
+            if(this.content.length === 0){
+                Toast('请输入内容');
+                return;
+            }
+            let  url = 'postcomment/' + this.id;
+            this.$http
+            .post(url,'content=' + this.content)
+            .then((response)=>{
+                if(response.status === 200 && response.data.status === 0){
+                    
+                    this.comments.unshift({
+                        user_nmae:'匿名用户',
+                        add_time: new Date(),
+                        content: this.content
+                    })
+                    this.content = '';
+                }else{
+                    
+                }
+                Toast(response.data.message);
+            })
+            .catch((err)=>{
+                console.error((err))
+            })
+        },
+        // 加载更多
+        loadmore(){
+           this.pageindex++;
+           this.getcomments()
         }
     }
 }
