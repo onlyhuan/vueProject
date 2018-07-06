@@ -15,7 +15,9 @@
 					<span class="mui-tab-label">会员</span>
 				</router-link>
 				<router-link to="/shopcar" class="mui-tab-item">
-					<span class="mui-icon mui-icon-contact"><span class="mui-badge">9</span></span>
+					<span class="mui-icon mui-icon-contact">
+						<span class="mui-badge">{{count}}</span>
+					</span>
 					<span class="mui-tab-label">购物车</span>
 				</router-link>
 				<router-link to="/search" class="mui-tab-item">
@@ -33,7 +35,8 @@ export default {
 	name: "App",
 	data(){
 		return {
-			isShow:false
+			isShow:false,
+			count:0
 		}
 	},
 	methods:{
@@ -51,8 +54,9 @@ export default {
 	},
 	created (){
 		this.judgeback(this.$route.path);
-		vueObj.$on('updateBadge',function(count){
-			console.log(count)
+		vueObj.$on('updateBadge',(count)=>{
+			// 
+			this.count += count;
 		})
 	},
 	watch: {

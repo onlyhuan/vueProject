@@ -15,7 +15,15 @@
         <div class="num">   
            <!-- number组件 -->
             <number :stock="info.stock_quantity" @numberchange="numberchanged"></number>
-            <div v-if="false" class="ball"></div>
+            <transition
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:after-enter="afterEnter"
+                v-on:after-leave="afterLeave"
+            >
+                <div v-show="isShow" class="ball"></div>
+            </transition>
+            
         </div> 
             <div class="buttom">
                 <div class="mui-btn mui-btn-primary">立即购买</div>
@@ -52,7 +60,9 @@ export default {
         return{
             imgurl:'getthumimages/' + this.id,
             info:{},
-            count:1
+            count:1,
+            // 控制小球动画显示隐藏
+            isShow:false
         }
     },
     props:['id'],
@@ -92,7 +102,36 @@ export default {
             vueObj.$emit('updateBadge',this.count);
             // 2.2 更新
             // 3、小球运动
+            this.isShow = true
             // 4、保存购物车的数据到本地存储
+        },
+        // 小球运动的钩子函数
+        beforeEnter: function (el) {
+            el.style.transform = 'translate(0,0)'
+        },
+        enter: function (el, done) {
+            // Element.getBoundingClientRect()获取元素的大小及其相对于视口的位置
+            // 获取元素的位置
+            let elX = el.getBoundingClientRect().left;
+            let elY = el.getBoundingClientRect().top;
+            // 获取badge的位置需要操作dom
+            let badge = document.querySelector('.mui-badge');
+            let badgeX = badge.getBoundingClientRect().left;
+            let badgeY = badge.getBoundingClientRect().top;
+            // 两位置相减就是小球要运动的距离
+            let x = badgeX - elX;
+            let y = badgeY - elY;
+
+            el.style.transform = `translate(${x}px,${y}px)`;
+            done()
+        },
+        afterEnter: function (el) {
+            this.isShow = false;
+        },
+        afterLeave: function (el) {
+             // 当动画小球完全离开的时候，更新badge
+            // 触发事件
+            vueObj.$emit('updateBadge',this.count);
         }
     },
     components:{
