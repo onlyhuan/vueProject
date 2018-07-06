@@ -16,10 +16,12 @@ import video from '@/components/Home/Video/video.vue'
 
 import newsDetail from '@/components/Home/News/newsDetail.vue'
 import shareDetail from '@/components/Home/Share/shareDetail.vue'
+import buyDetail from '@/components/Home/Buy/buyDetail.vue'
+import buyComment from '@/components/Home/Buy/buyComment.vue'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   linkActiveClass: 'mui-active',
   routes: [
     {
@@ -28,22 +30,26 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: home
+      component: home,
+      meta:{title:'首页'}
     },
     {
       path:'/member',
       name:'member',
-      component:member
+      component:member,
+      meta:{title:'会员'}
     },
     {
       path:'/shopcar',
       name:'shopcar',
-      component:shopcar
+      component:shopcar,
+      meta:{title:'购物车'}
     },
     {
       path:'/search',
       name:'search',
-      component:search
+      component:search,
+      meta:{title:'搜索'}
     },
     {
       path:'/news',
@@ -86,6 +92,29 @@ export default new Router({
       name:'shareDetail',
       component:shareDetail,
       props:true
+    },
+    {
+      path:'/buy/:id', 
+      name:'buyDetail',
+      component:buyDetail,
+      props:true
+    },
+    {
+      path:'/buyDetail/buyComment/:id',
+      name:'buyComment',
+      component:buyComment,
+      props:true
     }
   ]
+});
+router.afterEach((to, from) => {
+  if(to.meta.title){
+    window.document.title = to.meta.title;
+  }else{
+    window.document.title = '默认值';
+  }
 })
+
+export default router;
+
+

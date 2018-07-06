@@ -11,6 +11,8 @@ Vue.filter('fmtdate',(date,fmtStr)=>{
 
 import Mint from 'mint-ui';
 Vue.use(Mint);
+import 'mint-ui/lib/style.css';
+
 
 
 import axios from 'axios';
@@ -20,6 +22,8 @@ Vue.prototype.axios = axios;
 
 import './assets/css/mui.css'
 import './assets/fonts/mui.ttf'
+// import '@/assets/css/golbal.css'
+
 
 // Vue.config.productionTip = false
 

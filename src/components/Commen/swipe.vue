@@ -14,7 +14,8 @@
 export default {
     data(){
         return {
-            images:[]
+            images:[],
+            humimages:[]
         }
     },
     props:['imgUrl'],

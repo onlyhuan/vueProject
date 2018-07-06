@@ -1,7 +1,8 @@
 <template>
+
   <div id="app">
      <header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a @click="goback" v-if="isShow" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">底部选项卡-div模式</h1>
 		</header>
 		<nav class="mui-bar mui-bar-tab">
@@ -27,8 +28,38 @@
 </template>
 
 <script>
+import vueObj from './router/communication.js';
 export default {
-  name: "App"
+	name: "App",
+	data(){
+		return {
+			isShow:false
+		}
+	},
+	methods:{
+		goback () {
+			this.$router.back()
+		},
+		judgeback(path){
+			let arr = ['/home','/member','/shopcar','/search'];
+			if(arr.indexOf(path) == -1){
+				this.isShow = true;
+			}else{
+				this.isShow = false;
+			}
+		}
+	},
+	created (){
+		this.judgeback(this.$route.path);
+		vueObj.$on('updateBadge',function(count){
+			console.log(count)
+		})
+	},
+	watch: {
+		'$route': function(newValue){
+			this.judgeback(newValue.path);
+		}
+	}
 };
 </script>
 

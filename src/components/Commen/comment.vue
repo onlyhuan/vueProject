@@ -15,7 +15,7 @@
                 <div class="content">{{ item.content }}</div>
                 <div>
                     <span class="user">{{ item.user_name }}</span>
-                    <span>{{ item.add_time|fmtdate('YYYY-MM-DD HH:mm:ss') }}</span>
+                    <span>{{ item.add_time | fmtdate('YYYY-MM-DD HH:mm:ss') }}</span>
                 </div>
             </div>
 
@@ -68,7 +68,8 @@ export default {
                 if(response.status === 200 && response.data.status === 0){
                     
                     this.comments.unshift({
-                        user_nmae:'匿名用户',
+
+                        user_nmae: '匿名用户',
                         add_time: new Date(),
                         content: this.content
                     })
