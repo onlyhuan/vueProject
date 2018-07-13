@@ -6,7 +6,7 @@
             <ul class="mui-table-view mui-grid-view">
 		        <li v-for="item in goods" :key="item.id" class="mui-table-view-cell
                 mui-media mui-col-xs-6">
-		            <router-link :to="{name:'buyDetail', params:{id:item.id}}" >
+		            <router-link :to=" {name: 'buyDetail', params:{id:item.id}}" >
 		                <img class="mui-media-object" :src="item.img_url">
 		                <div class="mui-media-body">{{ item.title }}</div>
                     </router-link>

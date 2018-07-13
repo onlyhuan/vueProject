@@ -12,9 +12,11 @@
                 市场价：<s>￥{{info.market_price}}</s>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 销售价：<span>￥{{info.sell_price}}</span>
             </div>
-        <div class="num">   
+        <div class="num"> 
+            <span>购买数量:</span> 
            <!-- number组件 -->
-            <number :stock="info.stock_quantity" @numberchange="numberchanged"></number>
+            <number class="number" :stock="info.stock_quantity" 
+                @numberchange="numberchanged"></number>
             <transition
                 v-on:before-enter="beforeEnter"
                 v-on:enter="enter"
@@ -37,7 +39,7 @@
             <div class="info"> 
                 <p>商品编号：{{info.goods_no}}</p>
                 <p>库存情况：{{info.stock_quantity}}件</p>
-                <p>上架时间：{{info.add_time |fmtdate('YYYY-MM-DD HH:ss:mm')}}</p>
+                <p>上架时间：{{info.add_time | fmtdate('YYYY-MM-DD HH:ss:mm')}}</p>
             </div>
         </div>
 
@@ -51,9 +53,10 @@
 </template>
 
 <script>
-import swipe from '../../Commen/swipe.vue'
-import number from '../../Commen/number.vue'
-import vueObj from '../../../router/communication'
+import swipe from '../../Commen/swipe.vue';
+import number from '../../Commen/number.vue';
+import vueObj from '../../../router/communication';
+import { setData } from '../../../router/localstorageHelp';
 
 export default {
     data(){
@@ -65,7 +68,7 @@ export default {
             isShow:false
         }
     },
-    props:['id'],
+    props: ['id'],
     created(){
         this.getinfo()
     },
@@ -91,19 +94,21 @@ export default {
         push(){
            this.$router.push({name: 'buyComment', params: {id: this.id}})
         },
-        numberchanged(count){
-            this.count = count
+        numberchanged(obj){
+            this.count = obj.count;
         },
         // 点击购物车
         addcart(){
             // 1、获取到number组件中的count
             // 2、更新底部的badge
             // 2.1 点击加入购物车要把number组件的数据传递到APP.vue中
-            vueObj.$emit('updateBadge',this.count);
+            // vueObj.$emit('updateBadge',this.count);
             // 2.2 更新
             // 3、小球运动
             this.isShow = true
+           
             // 4、保存购物车的数据到本地存储
+           setData({id: this.id, count:this.count})
         },
         // 小球运动的钩子函数
         beforeEnter: function (el) {
@@ -172,6 +177,9 @@ export default {
         position: relative;
         margin-left: 18px;
         font-size: 15px;
+    }
+    .num .number{
+        display: inline-block;
     }
     .ball{
         position: absolute;

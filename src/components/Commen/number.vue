@@ -1,14 +1,9 @@
 <template>
 <div class="mui-content">
-    <div>
-    购买数量:
-		<div class="mui-numbox">
-			<button @click="sub" class="mui-btn mui-btn-numbox-minus" type="button">-</button>
-			<input class="mui-input-numbox" type="number" :placeholder="count"/>
-			<button @click="add" class="mui-btn mui-btn-numbox-plus" type="button">+</button>
-		</div>
-    </div>    
-    
+		<div class="number">
+			<div @click="add" class="left">+</div><div class="middle"> {{ count }}
+            </div><div class="right" @click="sub">-</div>
+		</div>  
 </div>
     
 </template>
@@ -19,39 +14,57 @@
 export default {
     data(){
         return{
-            count:1
+            count: 1,
+            type:''
         }
     },
-    props:['stock'],
+    props:['stock', 'num', 'id'],
     created(){
-        
+        this.count = this.num ? this.num : 1;
     },
     methods:{
-        add(){
+        add() {
             if(this.count >= this.stock){
-                return
+                return;
             }
             this.count++;
+            this.type = 'add';
             this.notify()
         },
-        sub(){
+        sub() {
             if(this.count === 1){
-                return
+                return;
             }
             this.count--;
+            this.type = 'sub';
             this.notify()
         },
         notify(){
-            this.$emit('numberchange',this.count)
+            this.$emit('numberchange', {id: this.id, count: this.count, type: this.type})
         }
     }
 }
 </script>
 
 <style scoped>
-.mui-numbox{
-        width: 120px;
-        height: 30px;
-    }
+.number {
+  display: inline-block;
+  text-align: center;
+}
+
+.number .left,
+.number .middle,
+.number .right {
+  display: inline-block;
+  width: 30px;
+  height: 25px;
+  border: 1px solid rgba(92, 92, 92, 0.5);
+}
+
+.number .middle {
+  width: 40px;
+  border-right: 0px;
+  border-left: 0px;
+}
     
 </style>
